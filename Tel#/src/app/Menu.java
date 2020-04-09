@@ -13,9 +13,9 @@ public class Menu {
         scan = new Scanner(System.in);
         tel = new Backend(info);
         String caseNum = "0";
-        while (!caseNum.equals("5")) {
+        while (!caseNum.equals("6")) {
             System.out.println(
-                    "\n1)Search\n2)Change\n3)Add Number\n4)Remove\n5)exit");
+                    "\n1)Search\n2)Change\n3)Add Number\n4)Remove\n5)Export\n6)exit");
             System.out.print("input: ");
             caseNum = scan.next();
             switch (caseNum) {
@@ -38,10 +38,13 @@ public class Menu {
                     tel.delByName(scan.next());
                     break;
                 case "5":
+                    tel.export(aes256.getName());
+                    break;
+                case "6":
                     aes.disarmShutDownHook();
                     System.out.println("\nsave?(Y/N): ");
                     String choice=scan.next();
-                    if(choice=="y"|choice=="Y")
+                    if(choice.equals("y")||choice.equals("Y"))
                         aes.save();
                     System.out.println("Exiting...");
                     aes256.del();
@@ -50,7 +53,7 @@ public class Menu {
                 default:
                     System.out.println("Not available");
             }
-            if (!caseNum.equals("5")) {
+            if (!caseNum.equals("6")) {
                 System.out.print("any key to continue...");
                 System.in.read();
                 System.out.println("\n\n\n");

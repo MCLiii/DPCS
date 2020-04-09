@@ -23,7 +23,6 @@ public class AES256 {
     public AES256() {
         armShutDownHook();
     }
-
     // 登陆菜单
     public RandomAccessFile login() throws Exception {
         scan = new Scanner(System.in);
@@ -41,7 +40,6 @@ public class AES256 {
             return plainText;
         }
     }
-
     // 新建用户
     public void newEncrypt() throws Exception {
         Console console=System.console();
@@ -60,7 +58,6 @@ public class AES256 {
         plainText = new RandomAccessFile(username + ".dat", "rw");
         encrypted = new RandomAccessFile(username + ".aes", "rw");
     }
-
     // dat存为aes
     public void save() throws Exception {
         plainText.seek(0);
@@ -69,13 +66,11 @@ public class AES256 {
         encrypted.setLength(0);
         encrypted.write(encrypt(temp, password.getBytes()));
     }
-
     // 删除明文
     public void del() {
         File del = new File(username + ".dat");
         del.deleteOnExit();
     }
-
     // 用户解密
     public void decryption() throws Exception {
         do {
@@ -91,7 +86,6 @@ public class AES256 {
         plainText = new RandomAccessFile(username + ".dat", "rw");
         plainText.write(plain);
     }
-
     // 生成密钥
     private SecretKey generateKey(byte[] key) throws Exception {
         SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
@@ -100,7 +94,6 @@ public class AES256 {
         gen.init(256, random);
         return gen.generateKey();
     }
-
     // 数据加密
     public byte[] encrypt(byte[] plainBytes, byte[] key) throws Exception {
         SecretKey secKey = generateKey(key);
@@ -108,7 +101,6 @@ public class AES256 {
         cipher.init(Cipher.ENCRYPT_MODE, secKey);
         return cipher.doFinal(plainBytes);
     }
-
     // 数据解密
     public byte[] decrypt(byte[] cipherBytes, byte[] key) {
         try {
@@ -117,11 +109,10 @@ public class AES256 {
             cipher.init(Cipher.DECRYPT_MODE, secKey);
             return cipher.doFinal(cipherBytes);
         } catch (Exception e) {
-            System.out.print("Wrong Password!\npassword: ");
-            return decrypt(scan.next().getBytes(), key);
+            System.out.print("Wrong Password!\n");
+            return decrypt(cipherBytes, new String(System.console().readPassword("password :")).getBytes());
         }
     }
-
     // 强制保存及删除明文
     public void armShutDownHook() {
         Runtime.getRuntime().addShutdownHook(shutThread=new Thread(new Runnable() {
@@ -135,7 +126,12 @@ public class AES256 {
                 }
         }));
     }
+    //关闭应急线程
     public void disarmShutDownHook(){
         shutThread.stop();
+    }
+    //获得文件名
+    public String getName(){
+        return username;
     }
 }
